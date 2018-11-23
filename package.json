@@ -1,0 +1,26 @@
+{
+  "name": "turbo-octo-waffle",
+  "version": "1.0.0",
+  "description": "Full stack final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ironysi/turbo-octo-waffle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ironysi/turbo-octo-waffle/issues"
+  },
+  "homepage": "https://github.com/ironysi/turbo-octo-waffle#readme",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.13",
+    "nodemon": "^1.18.6"
+  }
+}
