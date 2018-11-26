@@ -8,7 +8,7 @@ var url = "mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db";
 
 // CORS -> This is needed because front end is running different port than backend
 router.use(cors({ origin: [
-  "http://localhost{frontEndPort}"
+  "http://localhost:4200" // added frontend port -Jonas
 ],credentials: true }));
 
 // Express session
@@ -28,7 +28,7 @@ const validatePayloadMiddleware = (req, res, next) => {
   {
     req.status(403).send({errorMessage: "You need a payload"});
   }
-} 
+}
 
 
 // Login
@@ -36,7 +36,7 @@ router.post("/login", validatePayloadMiddleware, (req, res) => {
   // get user from database
   user = userModel()
 
-  MongoClient.connect(url, function(err, db) 
+  MongoClient.connect(url, function(err, db)
   {
     if (err) throw err;
     var dbo = db.db("mydb");
@@ -107,7 +107,7 @@ router.get('', (req, res, next) => {
       console.log(result);
 
       res.send(result)
-      
+
       db.close();
     });
   });
