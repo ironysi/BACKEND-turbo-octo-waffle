@@ -15,12 +15,20 @@ router.post("/login", (req, res) => {
   user.email = req.body.email;
   user.password = req.body.password;
 
-  userModel.findOne({email: "my@email.com"}, (err, result) => {
-    if(err) throw err;
+  userModel.findOne({email: user.email}, (err, result) => {
+    if(err) {    
+      res.sendStatus(403)
+      throw err;
+    }
+    else{
+      console.log("Server: /user/login: EMAIL: " + result.email + "\t PW: " + result.password)
 
-    console.log(result)
+      if(result.password === user.password){
+        res.json(result)
+      }
+    }
   } );
-  console.log("Server: /user/login: request.body " + user.password + "\t" + user.email)
+  
   
   // login user
 });
@@ -56,19 +64,6 @@ router.get('/:id', (req, res, next) => {
   console.log('GET: video by id:' + req.params.id);
   // Implement Mongoose query to find Student by Id return list of students and return
 
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("mydb");
-
-    dbo.collection("videos").find({_id: req.params.id}, function(err, result) {
-      if (err) throw err;
-      console.log(result.name);
-
-      res.send(result);
-
-      db.close();
-    });
-  });
 
   res.finished();
 })
