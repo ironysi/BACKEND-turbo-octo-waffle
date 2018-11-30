@@ -2,8 +2,6 @@
 
 
 const express = require('express');
-const session = require('express-session');
-const cors = require('corst')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -23,8 +21,8 @@ const app = express();
 
 
 // *********** Include the Api routes ***********
-const customerRoutes = require("./routes/customers");
-const videoRoutes = require("./routes/videos")
+const accountRoutes = require("./routes/accountRoutes");
+const userRoutes = require("./routes/userRoutes")
 
 // *********** Connect to Mongo  ***********
 console.log('Attempting to connect to mongoose');
@@ -51,8 +49,8 @@ app.use((req, res, next) => {
 });
 
 // ******** Setup the Api routes ***********
-app.use("/api/customers", customerRoutes);
-app.use("/api/videos", videoRoutes);
+app.use("/account", accountRoutes);
+app.use("/user", userRoutes);
 
 // App listen
 app.listen(3000, () => {

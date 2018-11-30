@@ -1,5 +1,5 @@
 const express = require("express");
-const videoModel = require('../models/video');
+const videoModel = require('../models/account');
 
 const router = express.Router();
 
