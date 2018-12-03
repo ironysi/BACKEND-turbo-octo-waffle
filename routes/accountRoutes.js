@@ -1,76 +1,74 @@
 const express = require("express");
-const videoModel = require('../models/account');
+const accountModel = require('../models/account');
+const userModel = require('../models/user');
 
+const bodyParser = require('body-parser');
 const router = express.Router();
-
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db";
+router.use(bodyParser.json());
 
 
-router.get('', (req, res, next) => {
-
-  console.log('GET: video lists');
-  // Add Mongoose query to find all return list of students and return
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("mydb");
-
-    dbo.collection("videos").find({}).toArray(function(err, result) {
-      if (err) throw err;
-      console.log(result);
-
-      res.send(result)
-      
-      db.close();
-    });
-  });
-  res.finished();
+router.get("/getall", (req, res) => {
+  console.log("/getall: NEEDS REFACTOR");
+  console.log("/account/getall: " + req.body.owner_id);
+  if(isLoggedIn(req.body.owner_id)){
+    accountModel.find({owner_id: req.body.owner_id}, (accountError, accountResult) =>{
+      if(accountResult) {
+        // send accounts
+        res.json(accountResult);
+      } else {
+        // no accounts to send
+        res.json();
+      }
+    })
+  } else {
+    // unauthorized
+    res.status(401);
+    res.send();
+  }
 });
 
-router.get('/:id', (req, res, next) => {
+router.post("/create", (req, res) => {
+  console.log("/account/create: " + req.body.owner_id + " " + req.body.nickName);
 
-  console.log('GET: video by id:' + req.params.id);
-  // Implement Mongoose query to find Student by Id return list of students and return
 
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("mydb");
+  doIfLoggedIn(req.body.owner_id, (loggedIn) => {
+    if(loggedIn){
+      console.log("Creating..." + req.body.nickName);
 
-    dbo.collection("videos").find({_id: req.params.id}, function(err, result) {
-      if (err) throw err;
-      console.log(result.name);
+      accountModel.create(req.body, (err, result) => {
+        if(err){
+          console.error("Error: " + err);
+        } else {
+          console.log("Result: " + result);
+          res.status(200);
+          res.send();
+        }
+      });
 
-      res.send(result);
-
-      db.close();
-    });
+    } else {
+      res.status(401);
+      res.send();
+    }
   });
 
-  res.finished();
-})
-
-router.put('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose update Student by ID
-
-})
-router.post('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose update Student by ID
-
-
-})
-
-router.delete('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose delete one Student by ID
-
 });
+
+function doIfLoggedIn(user_id, callback) {
+  console.log("isLoggedIn(" + user_id + ")");
+  let loggedin;
+  userModel.findOne({_id: user_id}, (err, result) => {
+    if(err){
+      console.error(err);
+      loggedin = false;
+      //check login
+    } else if (result.loggedin === true) {
+      console.log("User is logged in!");
+      loggedin = true;
+    }
+
+    callback(loggedin);
+
+  });
+}
 
 module.exports = router;

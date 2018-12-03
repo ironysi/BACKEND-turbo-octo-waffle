@@ -1,11 +1,8 @@
 const express = require("express");
 const userModel = require('../models/user');
+
 const bodyParser = require('body-parser');
-
 const router = express.Router();
-
-var url = "mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db";
-
 router.use(bodyParser.json());
 
 // Login
@@ -16,80 +13,49 @@ router.post("/login", (req, res) => {
   user.password = req.body.password;
 
   userModel.findOne({email: user.email}, (err, result) => {
-    if(err) {    
+    if(err) {
       res.sendStatus(403)
-      throw err;
+      console.error(err);
     }
     else{
       console.log("Server: /user/login: EMAIL: " + result.email + "\t PW: " + result.password)
 
       if(result.password === user.password){
-        res.json(result)
+
+        userModel.findOneAndUpdate({email: result.email}, {loggedin: true}, (error, res)=>{
+          console.log("callback from find and update, error: " + error);
+          console.log("callback from find and update, result: " + res);
+        })
+        res.json({
+          "_id":result._id,
+          "email": result.email,
+          "name":result.name
+          });
       }
     }
-  } );
-  
-  
+  });
+
   // login user
 });
 
 
+router.post("/logout", (req, res) => {
+  // get user from database
+  var user = {}
+  user._id = req.body._id;
 
-
-
-
-router.get('', (req, res, next) => {
-
-  console.log('GET: video lists');
-  // Add Mongoose query to find all return list of students and return
-
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("fullstack_db");
-
-    dbo.collection("videos").find({}).toArray(function(err, result) {
-      if (err) throw err;
-      console.log(result);
-
-      res.send(result)
-
-      db.close();
-    });
+  userModel.findOneAndUpdate({_id: user._id},{loggedin: false}, (err, result) => {
+    if(err) {
+      console.error(err);
+      res.sendStatus(403);
+    }
+    else{
+      console.log("Server: /user/logout: " + result.name + " logged out");
+      res.sendStatus(200);
+    }
   });
-  res.finished();
-});
 
-router.get('/:id', (req, res, next) => {
-
-  console.log('GET: video by id:' + req.params.id);
-  // Implement Mongoose query to find Student by Id return list of students and return
-
-
-  res.finished();
-})
-
-router.put('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose update Student by ID
-
-})
-router.post('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose update Student by ID
-
-
-})
-
-router.delete('/:id', (req, res, next) => {
-
-  console.log('UPDATE: Customer by id: ' + req.params.id);
-
-  // Implement Mongoose delete one Student by ID
-
+  // logout user
 });
 
 module.exports = router;

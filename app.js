@@ -27,7 +27,7 @@ const userRoutes = require("./routes/userRoutes")
 // *********** Connect to Mongo  ***********
 console.log('Attempting to connect to mongoose');
 
-mongoose.connect("mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db")
+mongoose.connect("mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db", {useNewUrlParser: true})
   .then(() => {
     console.log('Connected to Mongo database!');
   })
