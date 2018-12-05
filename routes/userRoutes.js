@@ -8,32 +8,42 @@ router.use(bodyParser.json());
 // Login
 router.post("/login", (req, res) => {
   // get user from database
-  var user = {}
-  user.email = req.body.email;
-  user.password = req.body.password;
+  //console.log("/login : " + req.body.password + " " + req.body.email);
 
-  userModel.findOne({email: user.email}, (err, result) => {
-    if(err) {
-      res.sendStatus(403)
-      console.error(err);
-    }
-    else{
-      console.log("Server: /user/login: EMAIL: " + result.email + "\t PW: " + result.password)
+  if(req.body.email === "" || req.body.password === ""){
+    res.sendStatus(403);
+    console.log("POST /LOGIN : EMAIL" + req.body.email + " AND PASSWORD"+ req.body.password+" INVALID");
+  } else {
+    console.log("POST /LOGIN : EMAIL" + req.body.email + " AND PASSWORD"+ req.body.password+" VALID");
 
-      if(result.password === user.password){
+    userModel.findOne({email: req.body.email}, (error, result) => {
 
-        userModel.findOneAndUpdate({email: result.email}, {loggedin: true}, (error, res)=>{
-          console.log("callback from find and update, error: " + error);
-          console.log("callback from find and update, result: " + res);
-        })
-        res.json({
-          "_id":result._id,
-          "email": result.email,
-          "name":result.name
-          });
+      if(error) {
+
+        res.status(403).send("Something went wrong");
+
+      } else if (result) {
+        console.log("Server: /user/login: EMAIL: " + result);
+
+        if(result.password == req.body.password){
+
+          userModel.findOneAndUpdate({email: result.email}, {loggedin: true}, (error, res)=>{
+            console.log("callback from find and update, error: " + error);
+            console.log("callback from find and update, result: " + res);
+          })
+          res.json({
+            "_id":result._id,
+            "email": result.email,
+            "name":result.name
+            });
+        }
       }
-    }
-  });
+      if(!res.headersSent){
+        res.status(403).send("WRONG CREDENTIALS");
+      }
+    });
+  }
+
 
   // login user
 });
