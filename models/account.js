@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const accountSchema = mongoose.Schema({
     lastsync: String,
     nickName: String,
+    owner_id: String, // dunno lol
     budget: {
         userName: String,
         budgetName: String,
