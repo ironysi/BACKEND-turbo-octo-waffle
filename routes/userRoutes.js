@@ -79,17 +79,21 @@ router.post("/create", (req, res) => {
     }
     else if(result) {
       console.log("User with this email already exist!!!")
-      res.send("User with this email already exist!!!", 409)
+      res.status(409).send("User with this email already exist!!!")
     }
     else{
-      userModel.create(req.body, (err, result) => {
-        if(err) {
-          console.error(err);
+      userModel.create(req.body, (userErr, userResult) => {
+        if(userErr) {
+          console.error(userErr);
           res.sendStatus(403);
         }
         else{
-          console.log("Server: /user/create: " + result.name + " created");
-          res.sendStatus(200);
+          console.log("Server: /user/create: " + userResult.name + " created");
+          res.status(200).json({
+            _id: userResult._id,
+            name: userResult.name,
+            email: userResult.email
+          });
         }
       });
     }

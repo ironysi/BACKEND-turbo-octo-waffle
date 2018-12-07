@@ -36,6 +36,7 @@ router.get("/getallusers", (req, res) => {
   });
 });
 
+
 /**
  * admin/deleteuser
  * deletes user
