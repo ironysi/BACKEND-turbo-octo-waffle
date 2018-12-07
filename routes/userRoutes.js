@@ -100,23 +100,4 @@ router.post("/create", (req, res) => {
 });
 
 
-
-/**
- * user/
- * 
- */
-router.post("/delete", (req, res) => {
-  userModel.create(req.body, (err, result) => {
-    if(err) {
-      console.error(err);
-      res.sendStatus(403);
-    }
-    else{
-      console.log("Server: /user/create: " + result.name + " created");
-      res.sendStatus(200);
-    }
-  });
-});
-
-
 module.exports = router;

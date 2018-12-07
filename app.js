@@ -10,6 +10,7 @@ const app = express();
 // *********** Include the Api routes ***********
 const accountRoutes = require("./routes/accountRoutes");
 const userRoutes = require("./routes/userRoutes")
+const adminRoutes = require("./routes/adminRoutes")
 
 // *********** Connect to Mongo  ***********
 console.log('Attempting to connect to mongoose');
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 // ******** Setup the Api routes ***********
 app.use("/account", accountRoutes);
 app.use("/user", userRoutes);
+app.use("/admin", adminRoutes)
 
 // App listen
 app.listen(3000, () => {
