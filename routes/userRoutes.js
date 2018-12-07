@@ -46,7 +46,6 @@ router.post("/login", (req, res) => {
 });
 
 
-
 /**
  * user/logout
  * Log user out of the account
@@ -62,6 +61,24 @@ router.post("/logout", (req, res) => {
     }
     else{
       console.log("Server: /user/logout: " + result.name + " logged out");
+      res.sendStatus(200);
+    }
+  });
+});
+
+
+/**
+ * user/create
+ * 
+ */
+router.post("/create", (req, res) => {
+  userModel.create(req.body, (err, result) => {
+    if(err) {
+      console.error(err);
+      res.sendStatus(403);
+    }
+    else{
+      console.log("Server: /user/create: " + result.name + " created");
       res.sendStatus(200);
     }
   });
