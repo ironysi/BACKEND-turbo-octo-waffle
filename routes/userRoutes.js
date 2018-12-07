@@ -69,9 +69,43 @@ router.post("/logout", (req, res) => {
 
 /**
  * user/create
- * 
+ * check if user with this email exist, if not then create new one
  */
 router.post("/create", (req, res) => {
+
+  userModel.findOne({email: req.body.email}, (err, result) => {
+    if(err){
+      console.error(err);
+    }
+    else if(result) {
+      console.log("User with this email already exist!!!")
+      res.send("User with this email already exist!!!", 409)
+    }
+    else{
+      userModel.create(req.body, (err, result) => {
+        if(err) {
+          console.error(err);
+          res.sendStatus(403);
+        }
+        else{
+          console.log("Server: /user/create: " + result.name + " created");
+          res.sendStatus(200);
+        }
+      });
+    }
+  });
+
+
+
+});
+
+
+
+/**
+ * user/
+ * 
+ */
+router.post("/delete", (req, res) => {
   userModel.create(req.body, (err, result) => {
     if(err) {
       console.error(err);
@@ -83,5 +117,6 @@ router.post("/create", (req, res) => {
     }
   });
 });
+
 
 module.exports = router;
