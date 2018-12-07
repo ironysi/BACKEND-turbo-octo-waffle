@@ -32,13 +32,12 @@ router.get("/getall", (req, res) => {
 });
 
 
-  /**
-   * account/create
-   * Create new account for user that is logged in
-   */
+/**
+ * account/create
+ * Create new account for user that is logged in
+ */
 router.post("/create", (req, res) => {
   console.log("/account/create: " + req.body.owner_id + " " + req.body.nickName);
-
 
   doIfLoggedIn(req.body.owner_id, res, (id) => {
     console.log("Creating..." + req.body.nickName);
@@ -78,7 +77,42 @@ function doIfLoggedIn(user_id, res, callback) {
     res.status(401);
     res.send();
   }
-
 }
+
+
+/**
+ * account/create
+ * Create new account for user that is logged in
+ */
+router.post("/update"), (req, res) => {
+  console.log("/account/update: " + req.body.owner_id + " " + req.body.nickName);
+
+
+  function doIfLoggedIn(user_id, res, callback) {
+    console.log("isLoggedIn(" + user_id + ")");
+    if(user_id){
+      userModel.findByIdAndUpdate({_id: user_id}, (err, result) => {
+      if(err){
+        console.error(err);
+        res.status(401);
+        res.send();
+        //check login
+      }
+  
+      if(result.loggedin === true) {
+        console.log("User is logged in!");
+        callback(user_id);
+      } else {
+        res.status(401);
+        res.send();
+      }
+    });
+    } else {
+      res.status(401);
+      res.send();
+    }
+  }
+}
+
 
 module.exports = router;

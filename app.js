@@ -7,19 +7,6 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// // CORS -> This is needed because front end is running different port than backend
-// app.use(cors({ origin: [
-//   "http://localhost{frontEndPort}"
-// ],credentials: true }));
-
-// // Express session
-// app.use(session({
-//   secret: "This should have been secret...",
-//   resave: false,
-//   saveUninitialized: true
-// }));
-
-
 // *********** Include the Api routes ***********
 const accountRoutes = require("./routes/accountRoutes");
 const userRoutes = require("./routes/userRoutes")
@@ -28,7 +15,7 @@ const userRoutes = require("./routes/userRoutes")
 console.log('Attempting to connect to mongoose');
 
 mongoose.connect("mongodb://admin:admin1@ds231133.mlab.com:31133/fullstack_db", {useNewUrlParser: true})
-  .then(() => {
+  .then(() => { 
     console.log('Connected to Mongo database!');
   })
   .catch(err  => {
