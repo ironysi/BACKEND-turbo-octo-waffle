@@ -7,6 +7,11 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 
+
+  /**
+   * account/getall
+   * Returns all accounts for user that is logged in.
+   */
 router.get("/getall", (req, res) => {
   console.log("/getall: NEEDS REFACTOR");
   console.log("/account/getall: " + req.param("owner_id"));
@@ -16,7 +21,7 @@ router.get("/getall", (req, res) => {
       if(accountResult) {
         // send accounts
         res.json(accountResult);
-      } else {
+      } else {  
         // no accounts to send
         res.json();
       }
@@ -26,6 +31,11 @@ router.get("/getall", (req, res) => {
 
 });
 
+
+  /**
+   * account/create
+   * Create new account for user that is logged in
+   */
 router.post("/create", (req, res) => {
   console.log("/account/create: " + req.body.owner_id + " " + req.body.nickName);
 
