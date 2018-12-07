@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 router.use(bodyParser.json());
 
-// Login
+/**
+ * user/login
+ * Login user (if he exists in the database)
+ */
 router.post("/login", (req, res) => {
-  // get user from database
-  //console.log("/login : " + req.body.password + " " + req.body.email);
-
   if(req.body.email === "" || req.body.password === ""){
     res.sendStatus(403);
     console.log("POST /LOGIN : EMAIL" + req.body.email + " AND PASSWORD"+ req.body.password+" INVALID");
@@ -43,14 +43,15 @@ router.post("/login", (req, res) => {
       }
     });
   }
-
-
-  // login user
 });
 
 
+
+/**
+ * user/logout
+ * Log user out of the account
+ */
 router.post("/logout", (req, res) => {
-  // get user from database
   var user = {}
   user._id = req.body._id;
 
@@ -64,8 +65,6 @@ router.post("/logout", (req, res) => {
       res.sendStatus(200);
     }
   });
-
-  // logout user
 });
 
 module.exports = router;
