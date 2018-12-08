@@ -48,7 +48,7 @@ router.get("/getall", (req, res) => {
       if(accountResult) {
         // send accounts
         res.json(accountResult);
-      } else {  
+      } else {
         // no accounts to send
         res.json();
       }
@@ -70,10 +70,11 @@ router.post("/create", (req, res) => {
     accountModel.create(req.body, (err, result) => {
       if(err){
         console.error("Error: " + err);
-      } else {
+      }
+      if (result) {
         console.log("Result: " + result);
         res.status(200);
-        res.send();
+        res.json(result);
       }
     }); // end of accountmodel.create
   }); // end of doIfLoggedIn + callback
@@ -115,10 +116,11 @@ router.post("/delete", (req, res) => {
     accountModel.findByIdAndDelete({_id: req.body._id}, (err, result) => {
       if(err){
         console.error("Error: " + err);
-      } else {
+      }
+      if (result) {
         console.log("Result: " + result);
         res.status(200);
-        res.send();
+        res.json(result);
       }
     }); // end of accountmodel.create
   }); // end of doIfLoggedIn + callback

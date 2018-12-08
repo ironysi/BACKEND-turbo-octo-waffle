@@ -57,11 +57,11 @@ router.post("/logout", (req, res) => {
   userModel.findOneAndUpdate({_id: user._id},{loggedin: false}, (err, result) => {
     if(err) {
       console.error(err);
-      res.sendStatus(403);
+      res.status(403).send();
     }
     else{
       console.log("Server: /user/logout: " + result.name + " logged out");
-      res.sendStatus(200);
+      res.status(200).send();
     }
   });
 });
