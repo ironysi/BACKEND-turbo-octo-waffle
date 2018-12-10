@@ -96,7 +96,7 @@ router.post("/update", (req, res) => {
       } else {
         console.log("Result: " + result);
         res.status(200);
-        res.send();
+        res.json(result);
       }
     }); // end of accountmodel.create
   }); // end of doIfLoggedIn + callback
